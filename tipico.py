@@ -5,7 +5,7 @@ import os
 from IPython.utils import io
 import subprocess
 
-# 1️⃣ Téléverser le fichier audio
+# 1️⃣ Téléverser le fichier audio 
 uploaded = files.upload()
 audio_file = list(uploaded.keys())[0]
 
