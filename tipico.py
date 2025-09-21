@@ -1,31 +1,36 @@
 # tipico.py
 
-from google.colab import files
 import os
-from IPython.utils import io
 import subprocess
+from google.colab import files
 
-# 1️⃣ Téléverser le fichier audio 
-uploaded = files.upload()
-audio_file = list(uploaded.keys())[0]
+# 1️⃣ Identifier le fichier audio dans l'espace de travail
+audio_extensions = [".mp3", ".wav", ".m4a", ".flac", ".ogg"]
+all_files = os.listdir()  # liste tous les fichiers dans le dossier courant
+audio_files = [f for f in all_files if os.path.splitext(f)[1].lower() in audio_extensions]
 
-# 2️⃣ Écrire le fichier sur le disque
-with open(audio_file, "wb") as f:
-    f.write(uploaded[audio_file])
-del uploaded
+if len(audio_files) == 0:
+    raise FileNotFoundError("Aucun fichier audio trouvé dans l'espace de travail.")
+elif len(audio_files) > 1:
+    raise Exception("Plusieurs fichiers audio trouvés. Assurez-vous qu'il n'y ait qu'un seul fichier audio.")
+else:
+    audio_file = audio_files[0]
 
-# 3️⃣ Installer Whisper et ffmpeg via subprocess (sorties masquées)
+print(f"Fichier audio trouvé : {audio_file}")
+
+# 2️⃣ Installer Whisper et ffmpeg (sorties masquées)
+import IPython.utils.io as io
 with io.capture_output() as captured:
     subprocess.run(["pip", "install", "--upgrade", "openai-whisper"], check=True)
     subprocess.run(["apt", "update", "-y"], check=True)
     subprocess.run(["apt", "install", "ffmpeg", "-y"], check=True)
 
-# 4️⃣ Transcrire avec le modèle large
-with io.capture_output() as captured:
-    subprocess.run(["whisper", audio_file, "--model", "large"], check=True)
+# 3️⃣ Transcrire avec Whisper en affichage temps réel
+print("\nTranscription en cours, merci de ne pas fermer cette page 44444...\n")
+get_ipython().system(f'whisper "{audio_file}" --model large')
 
-# 5️⃣ Préparer le nom du fichier texte généré
+# 4️⃣ Préparer le nom du fichier texte généré
 txt_file = os.path.splitext(audio_file)[0] + ".txt"
 
-# 6️⃣ Télécharger automatiquement le fichier texte
+# 5️⃣ Télécharger automatiquement le fichier texte
 files.download(txt_file)
