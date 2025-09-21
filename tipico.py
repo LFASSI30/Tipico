@@ -18,7 +18,7 @@ subprocess.run(["pip", "install", "--upgrade", "openai-whisper"], check=True)
 subprocess.run(["apt", "update", "-y"], check=True)
 subprocess.run(["apt", "install", "ffmpeg", "-y"], check=True)
 
-# 4️⃣ Transcrire avec le modèle large
+# 4️⃣ Transcrire avec le modèle large (sorties visibles)
 print("Transcription en cours… merci de ne pas fermer cette page.")
 subprocess.run(["whisper", audio_file, "--model", "large"], check=True)
 
