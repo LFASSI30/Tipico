@@ -20,8 +20,9 @@ with io.capture_output() as captured:
     subprocess.run(["apt", "update", "-y"], check=True)
     subprocess.run(["apt", "install", "ffmpeg", "-y"], check=True)
 
-# 4️⃣ Transcrire avec le modèle large (affichage activé)
-subprocess.run(["whisper", audio_file, "--model", "large"], check=True)
+# 4️⃣ Transcrire avec le modèle large
+with io.capture_output() as captured:
+    subprocess.run(["whisper", audio_file, "--model", "large"], check=True)
 
 # 5️⃣ Préparer le nom du fichier texte généré
 txt_file = os.path.splitext(audio_file)[0] + ".txt"
